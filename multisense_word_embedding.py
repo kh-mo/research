@@ -40,3 +40,4 @@ if __name__ == "__main__":
         model.train()
     model.test()
     model.visualization()
+

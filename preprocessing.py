@@ -28,3 +28,4 @@ if __name__ == "__main__":
     print("Save tokenized_data.pickle")
     json.dump(voca_count, open(os.getcwd() + "/data/voca_count", 'w'))
     print("Save voca_count")
+
