@@ -9,6 +9,11 @@ from torch.utils.data import DataLoader
 from torchvision import models, datasets, transforms
 
 if __name__ == "__main__":
+    '''
+    python baseline.py model="alexnet" test_dataset="imagenet"
+    return : acc, a number of parameters
+    '''
+
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
     pretrain_model = models.alexnet(pretrained=True).to(device)
@@ -26,10 +31,6 @@ if __name__ == "__main__":
 
     pred = []
     label = []
-    for idx, (test_img, test_label) in enumerate(test_data):
-        print(idx)
-        print(test_label)
-        break
 
     for idx, (test_img, test_label) in enumerate(test_data):
         pred += torch.argmax(pretrain_model(test_img.to(device)),dim=1).tolist()
