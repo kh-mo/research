@@ -10,4 +10,11 @@ All results are experimented by MNIST.
 
 *Model* | *Accuracy* 
 :---: | :---: 
-Lenet-300-100 | OO.OO% 
+Lenet-300-100 | 97.95% 
+
+
+All results are experimented by Imagenet-2012.
+
+*Model* | *Accuracy* 
+:---: | :---: 
+Alexnet | OO.OO% 
