@@ -1,7 +1,13 @@
-# research
+# Research
 
 This repository is used to test different topics what i want to experiment with.
 
-### topic1 - pruning
+### Topic1 - pruning
 
+### Result
 
+All results are experimented by MNIST.
+
+*Model* | *Accuracy* 
+:---: | :---: 
+Lenet-300-100 | OO.OO% 
