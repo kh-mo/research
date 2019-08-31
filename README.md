@@ -10,7 +10,8 @@ All results are experimented by MNIST.
 
 *Model* | *Accuracy* 
 :---: | :---: 
-Lenet-300-100 | 97.95% 
+Lenet-300-100 ref | 97.95%
+Lenet-300-100 pru | 00.00% 
 
 
 All results are experimented by Imagenet-2012.
