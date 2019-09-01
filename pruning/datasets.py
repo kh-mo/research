@@ -3,7 +3,7 @@ from torchvision import datasets, transforms
 def get_dataset(name, train=False, split="val"):
     dataset = None
     if name == "imagenet":
-        dataset = datasets.ImageNet(root="dataset/",
+        dataset = datasets.ImageNet(root="datasets/",
                                     split=split,
                                     download=True,
                                     transform=transforms.Compose([transforms.Resize((256, 256)),
@@ -12,7 +12,7 @@ def get_dataset(name, train=False, split="val"):
                                                                   transforms.Normalize(mean=[0.485, 0.456, 0.406],
                                                                                        std=[0.229, 0.224, 0.225])]))
     elif name == "mnist":
-        dataset = datasets.MNIST(root="dataset/",
+        dataset = datasets.MNIST(root="datasets/",
                                  train=train,
                                  download=True,
                                  transform=transforms.Compose([transforms.ToTensor()]))
