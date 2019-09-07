@@ -1,5 +1,8 @@
 '''
 과제 : plt 클래스의 객체 단위, 인스턴스 단위를 이해할 필요가 있음
+해당 예시는 동전던지기가 시행횟수가 늘어남에 따라 어떤 확률 분포를 띄게 되는지 나타내는 코드
+데이터 생성 : 베르누이 분포
+prior, posterior : 베타분포(인자에 대한 이해가 더 필요)
 '''
 import scipy.stats as stats
 import numpy as np
