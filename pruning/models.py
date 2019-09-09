@@ -1,12 +1,22 @@
+'''
+
+All models can be classified into two categoroies.
+1. download from pytorch hub
+2. made by author
+
+'''
+
 import os
+import warnings
+
 import torch
 import torch.nn as nn
 from torchvision import models
-from torch.utils.data import DataLoader
 
-class Lenet(nn.Module):
+
+class Lenet_300_100(nn.Module):
     def __init__(self, num_classes=10):
-        super(Lenet, self).__init__()
+        super(Lenet_300_100, self).__init__()
         self.classifier = nn.Sequential(
             nn.Linear(28 * 28, 300),
             nn.ReLU(),
@@ -20,30 +30,37 @@ class Lenet(nn.Module):
         x = self.classifier(x)
         return x
 
-def get_model(name, device, pretrain=True):
+
+class Lenet_5(nn.Module):
+    def __init__(self, num_classes=10):
+        super(Lenet_5, self).__init__()
+
+
+def get_model(args, pretrain=True):
     model = None
-    if name == "alexnet":
-        model = models.alexnet(pretrained=pretrain).to(device)
-    elif name == "lenet":
-        if os.path.isfile(os.path.join(os.getcwd(), "models/lenet-300-100")):
-            model = Lenet().to(device)
-            model.load_state_dict(torch.load(os.path.join(os.getcwd(), "models/lenet-300-100")))
+    if args.model == "alexnet":
+        model = models.alexnet(pretrained=pretrain).to(args.device)
+        print("model download from pytorch hub(https://pytorch.org/docs/stable/torchvision/models.html)")
+    elif args.model == "lenet_300_100":
+        if check_model(args.model):
+            model = Lenet_300_100().to(args.device)
+            model.load_state_dict(torch.load(os.path.join(os.getcwd(), "models/{}".format(args.model))))
         else:
-            model = Lenet().to(device)
-            from datasets import get_dataset
-            train_datasets = DataLoader(get_dataset(name="mnist", train=True), batch_size=256)
-            loss_function = nn.CrossEntropyLoss().to(device)
-            optim = torch.optim.Adam(model.parameters(), lr=0.0002)
-            for i in range(100): ## 100 에폭 훈련
-                loss_list = []
-                for input, target in train_datasets:
-                    loss = loss_function(model(input.to(device)), target.to(device))
-                    optim.zero_grad()
-                    loss.backward()
-                    optim.step()
-                    loss_list.append(loss.item())
-                if i % 10 == 0 or i == 99:
-                    loss = sum(loss_list) / len(loss_list)
-                    print("{} epoch, loss : {}".format(i, loss))
-            torch.save(model.state_dict(), os.path.join(os.getcwd(), "models/lenet-300-100"))
+            warnings.warn("{} model does not exist.".format(args.model))
+        print("{} is made by author".format(args.model))
+    elif args.model == "lenet_5":
+        if check_model(args.model):
+            model = Lenet_5().to(args.device)
+            model.load_state_dict(torch.load(os.path.join(os.getcwd(), "models/{}".format(args.model))))
+        else:
+            warnings.warn("{} model does not exist.".format(args.model))
+        print("{} is made by author".format(args.model))
+    else:
+        warnings.warn("{} model does not exist.".format(args.model))
+
+    model.eval()
     return model
+
+
+def check_model(model_name):
+    return os.path.isfile(os.path.join(os.getcwd(), "models/{}".format(model_name)))

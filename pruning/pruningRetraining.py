@@ -1,69 +1,49 @@
-import os
-os.chdir(os.path.join(os.getcwd(), "pruning"))
+'''
 
-import torch
+python pruningRetraining.py --model="alexnet" --dataset="imagenet" --pruning_epoch=10
+return : acc, a number of parameters
+
+step 1. get model, dataset
+step 2. pruning
+step 3. retraining
+step 4. evaluate
+
+'''
+
 import argparse
-from models import get_model
 from collections import OrderedDict
 
+import torch
 import torch.nn as nn
-from datasets import get_dataset
 from torch.utils.data import DataLoader
 
-# def pruning(model, threshold):
-#     return pruned_model, pruned_position
-#
-# def prune_backward_hook_function(module, grad_input, grad_output):
-#     # return print("module : {}, grad_input : {}, grad_output : {}".format(module, grad_input, grad_output))
-#     modified_grad_out = prune_position_list[-1] * grad_input[0]
-#     del prune_position_list[-1]
-#     return module, (modified_grad_out,), grad_output
+from models import get_model
+from datasets import get_dataset
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--model", type=str)
-    args = parser.parse_args()
-
-    ## model 선언
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    model = get_model(args.model, device)
-    model = get_model("lenet", device)
-    ## retrain위한 함수 설정
-    # model.register_backward_hook(prune_backward_hook_function)
-    # for position, module in model.classifier._modules.items():
-    #     print(module)
-    #     module.register_backward_hook(prune_backward_hook_function)
-
-    ## retrain시 필요한 데이터, loss, optim 설정
-    train_datasets = DataLoader(get_dataset(name="mnist", train=True), batch_size=256)
-    loss_function = nn.CrossEntropyLoss().to(device)
-    optim = torch.optim.Adam(model.parameters(), lr=0.0002)
-
+def pruning(model, args):
     prune_model = {}
     prune_position_list = []
-    threshold = 0.0
+    threshold = args.pruningThreshold
 
-    # pruning 반복 횟수
-    for i in range(10):
-        # pruning 수행
-        for name, tensor in model.state_dict().items():
-            prune_position = torch.clamp(tensor, min=threshold)
-            prune_position[prune_position > threshold] = 1
-            prune_model[name] = tensor * prune_position
-            prune_position_list.append(prune_position)
+    for name, tensor in model.state_dict().items():
+        prune_position = torch.clamp(tensor, min=threshold)
+        prune_position[prune_position > threshold] = 1
+        prune_model[name] = tensor * prune_position
+        prune_position_list.append(prune_position)
 
-        ## model save
-        new_state_dict = OrderedDict(prune_model)
-        model.load_state_dict(new_state_dict, strict=False)
-        # torch.save(model.state_dict(), os.path.join(os.getcwd(), "models/pruned_{}_times_{}_model".format(i, args.model)))
-        torch.save(model.state_dict(), os.path.join(os.getcwd(), "models/pruned_{}_times_{}_model".format(1, "lenet")))
+    new_state_dict = OrderedDict(prune_model)
+    model.load_state_dict(new_state_dict, strict=False)
+    return prune_position_list
 
+def retraining(model, train_data, prune_position_list, args):
+    loss_function = nn.CrossEntropyLoss().to(args.device)
+    optim = torch.optim.Adam(model.parameters(), lr=args.learningRate)
+
+    for epoch in args.retrainingEpochs:
         loss_list = []
-        for input, target in train_datasets:
-            # print(input)
-            # break
-            model_output = model(input.to(device))
-            loss = loss_function(model_output, target.to(device))
+        for input, target in train_data:
+            model_output = model(input.to(args.device))
+            loss = loss_function(model_output, target.to(args.device))
             optim.zero_grad()
             loss.backward()
             for idx, p in enumerate(model.parameters()):
@@ -72,11 +52,41 @@ if __name__ == "__main__":
             loss_list.append(loss.item())
 
         loss = sum(loss_list) / len(loss_list)
-        print("{} epoch, loss : {}".format(i, loss))
+        print("{} epoch, loss : {}".format(epoch, loss))
 
-model.state_dict().items()
+def evaluate(model, test_data):
+    return None
 
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--model", type=str)
+    parser.add_argument("--dataset", type=str)
+    parser.add_argument("--pruningEpochs", type=int, default=10)
+    parser.add_argument("--pruningThreshold", type=int, default=0)
+    parser.add_argument("--batch_size", type=int, default=256)
+    parser.add_argument("--learningRate", type=int, default=0.0002)
+    parser.add_argument("--retrainingEpochs", type=int, default=10)
+    args = parser.parse_args()
+    args.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
-p.grad * prune_position_list[-1]
+    # step 1
+    model = get_model(args)
+    print("{} model load complete!!".format(args.model))
 
-len(prune_position_list)
+    trainset, testset = get_dataset(args)
+    train_data = DataLoader(trainset, batch_size=args.batch_size)
+    test_data = DataLoader(testset, batch_size=args.batch_size)
+    print("{} dataset load complete!!".format(args.dataset))
+
+    # step 2
+    for epoch in range(args.pruningEpochs):
+        prune_position_list = pruning(model, args)
+
+        # step 3
+        retraining(model, train_data, prune_position_list, args)
+
+        # step 4
+        # evalutate(pruned_model, test_data)
+        for input, target in test_data:
+            evaluate(model)
+        save(model)
