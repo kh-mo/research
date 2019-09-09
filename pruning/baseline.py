@@ -20,6 +20,7 @@ from torch.utils.data import DataLoader
 
 from models import get_model
 from datasets import get_dataset
+from utils import evaluate
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -30,7 +31,7 @@ if __name__ == "__main__":
     args.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
     # step 1
-    pretrain_model = get_model(args)
+    model = get_model(args)
     print("{} model load complete!!".format(args.model))
 
     trainset, testset = get_dataset(args)
@@ -39,13 +40,4 @@ if __name__ == "__main__":
     print("{} dataset load complete!!".format(args.dataset))
 
     # step 2
-    pred = []
-    label = []
-    for idx, (test_img, test_label) in enumerate(test_data):
-        pred += torch.argmax(pretrain_model(test_img.to(args.device)), dim=1).tolist()
-        label += test_label.tolist()
-        print(idx)
-
-    total_acc = sum([1 if pred[i] == label[i] else 0 for i in range(len(pred))]) / len(pred)
-    print(total_acc)
-
+    evaluate(model, test_data, args)

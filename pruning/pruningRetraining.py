@@ -19,6 +19,7 @@ from torch.utils.data import DataLoader
 
 from models import get_model
 from datasets import get_dataset
+from utils import evaluate
 
 def pruning(model, args):
     prune_model = {}
@@ -39,7 +40,8 @@ def retraining(model, train_data, prune_position_list, args):
     loss_function = nn.CrossEntropyLoss().to(args.device)
     optim = torch.optim.Adam(model.parameters(), lr=args.learningRate)
 
-    for epoch in args.retrainingEpochs:
+    print("start retraining")
+    for epoch in range(args.retrainingEpochs):
         loss_list = []
         for input, target in train_data:
             model_output = model(input.to(args.device))
@@ -52,10 +54,7 @@ def retraining(model, train_data, prune_position_list, args):
             loss_list.append(loss.item())
 
         loss = sum(loss_list) / len(loss_list)
-        print("{} epoch, loss : {}".format(epoch, loss))
-
-def evaluate(model, test_data):
-    return None
+        print("{} epoch, loss : {}".format(epoch+1, loss))
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -86,7 +85,7 @@ if __name__ == "__main__":
         retraining(model, train_data, prune_position_list, args)
 
         # step 4
-        # evalutate(pruned_model, test_data)
-        for input, target in test_data:
-            evaluate(model)
-        save(model)
+        evaluate(model, test_data, args)
+        # for input, target in test_data:
+        #     evaluate(model)
+        # save(model)
