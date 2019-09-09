@@ -86,6 +86,4 @@ if __name__ == "__main__":
 
         # step 4
         evaluate(model, test_data, args)
-        # for input, target in test_data:
-        #     evaluate(model)
         # save(model)
