@@ -32,7 +32,10 @@ class Lenet_300_100(nn.Module):
 class Lenet_5(nn.Module):
     def __init__(self, num_classes=10):
         super(Lenet_5, self).__init__()
-
+        ## 3*3 6개
+        ## 3*3 6개
+        ## fully 160
+        ## fully 10
 
 def get_model(args, pretrain=True):
     model = None
