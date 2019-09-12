@@ -1,5 +1,4 @@
 '''
-
 python pruningRetraining.py --model="alexnet" --dataset="imagenet" --pruning_epoch=10
 return : acc, a number of parameters
 
@@ -7,9 +6,10 @@ step 1. get model, dataset
 step 2. pruning
 step 3. retraining
 step 4. evaluate
-
+step 5. save model
 '''
 
+import os
 import argparse
 from collections import OrderedDict
 
@@ -40,7 +40,6 @@ def retraining(model, train_data, prune_position_list, args):
     loss_function = nn.CrossEntropyLoss().to(args.device)
     optim = torch.optim.Adam(model.parameters(), lr=args.learningRate)
 
-    print("start retraining")
     for epoch in range(args.retrainingEpochs):
         loss_list = []
         for input, target in train_data:
@@ -54,7 +53,7 @@ def retraining(model, train_data, prune_position_list, args):
             loss_list.append(loss.item())
 
         loss = sum(loss_list) / len(loss_list)
-        print("{} epoch, loss : {}".format(epoch+1, loss))
+        print("{} epoch for retraining {}, loss : {}".format(epoch+1, args.dataset, loss))
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -79,11 +78,16 @@ if __name__ == "__main__":
 
     # step 2
     for epoch in range(args.pruningEpochs):
+        print("start pruning {} epoch".format(epoch+1))
         prune_position_list = pruning(model, args)
 
         # step 3
+        print("start pruning {} epoch's retraining".format(epoch+1))
         retraining(model, train_data, prune_position_list, args)
 
         # step 4
         evaluate(model, test_data, args)
-        # save(model)
+
+        # step 5
+        torch.save(model.state_dict(), os.path.join(os.getcwd(), "models/{}_{}_epoch_pruned".format(args.model, epoch+1)))
+        print("Complete {} epoch model saving".format(epoch+1))
