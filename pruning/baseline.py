@@ -1,5 +1,4 @@
 '''
-
 pretrain model : https://pytorch.org/docs/stable/torchvision/models.html
 dataset : https://pytorch.org/docs/stable/torchvision/datasets.html
 
@@ -10,7 +9,6 @@ Lenet is not in pytorch hub so we make it.
 
 step 1. get model, dataset
 step 2. evaluate
-
 '''
 
 import argparse

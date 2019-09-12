@@ -1,9 +1,7 @@
 '''
-
 All models can be classified into two categoroies.
 1. download from pytorch hub
 2. made by author
-
 '''
 
 import os
