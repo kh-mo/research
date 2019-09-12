@@ -7,22 +7,23 @@ This repository is used to test different topics what i want to experiment with.
 ### Result
 
 All results are experimented by MNIST.
+Non-pruned parameters mean non-zero parameters.
 
 *Model* | *Accuracy* | *Parameters* | *Compression Rate*
 :---: | :---: | :---: | :---:  
-Lenet_300_100 Ref | 97.97% | 000K | 00x
-Lenet_300_100 Pruned | 92.37% | 000K | 00x 
-Lenet_5 Ref | 00.00% | 000K | 00x
-Lenet_5 Pruned | 00.00% | 000K | 00x 
+Lenet_300_100 Ref | 97.97% | 266K(266,610) | 
+Lenet_300_100 Pruned | 92.37% | 108K(108,026) | 2x 
+Lenet_5 Ref | 00.00% | 000K() | 
+Lenet_5 Pruned | 00.00% | 000K() | 00x 
 
 All results are experimented by Imagenet-2012.
 
 *Model* | *Accuracy* | *Parameters* | *Compression Rate*
 :---: | :---: | :---: | :---:
-Alexnet Ref | OO.OO% | 000K | 00x
-Alexnet Pruned | OO.OO% | 000K | 00x 
-VGGnet_16 Ref | OO.OO% | 000K | 00x
-VGGnet_16 Pruned | OO.OO% | 000K | 00x
+Alexnet Ref | OO.OO% | 000K() | 
+Alexnet Pruned | OO.OO% | 000K() | 00x 
+VGGnet_16 Ref | OO.OO% | 000K() | 
+VGGnet_16 Pruned | OO.OO% | 000K() | 00x
 
 ## Getting Start
 ### Get lenet model file
