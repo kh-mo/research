@@ -78,7 +78,8 @@ if __name__ == "__main__":
 
     # step 2
     for epoch in range(args.pruningEpochs):
-        print("start pruning {} epoch".format(epoch+1))
+        epoch = epoch+1 # 0~9 -> 1~10
+        print("start pruning {} epoch".format(epoch))
         prune_position_list = pruning(model, args)
 
         # step 3
@@ -88,5 +89,5 @@ if __name__ == "__main__":
         evaluate(model, test_data, args)
 
         # step 5
-        torch.save(model.state_dict(), os.path.join(os.getcwd(), "models/{}_{}_epoch_pruned".format(args.model, epoch+1)))
-        print("Complete {} epoch model saving\n".format(epoch+1))
+        torch.save(model.state_dict(), os.path.join(os.getcwd(), "models/{}_{}_epoch_pruned".format(args.model, epoch)))
+        print("Complete {} epoch model saving\n".format(epoch))
