@@ -11,7 +11,6 @@ import torch
 import torch.nn as nn
 from torchvision import models
 
-
 class Lenet_300_100(nn.Module):
     def __init__(self, num_classes=10):
         super(Lenet_300_100, self).__init__()
@@ -28,14 +27,29 @@ class Lenet_300_100(nn.Module):
         x = self.classifier(x)
         return x
 
-
 class Lenet_5(nn.Module):
     def __init__(self, num_classes=10):
         super(Lenet_5, self).__init__()
-        ## 3*3 6개
-        ## 3*3 6개
-        ## fully 160
-        ## fully 10
+        self.features = nn.Sequential(
+            nn.Conv2d(1, 6, kernel_size=3),
+            nn.ReLU(),
+            nn.MaxPool2d(kernel_size=2, stride=2),
+            nn.Conv2d(6, 6, kernel_size=3),
+            nn.ReLU(),
+            nn.MaxPool2d(kernel_size=2, stride=2, padding=1),
+        )
+        self.classifier = nn.Sequential(
+            nn.Dropout(),
+            nn.Linear(216, 128),
+            nn.ReLU(),
+            nn.Dropout(),
+            nn.Linear(128, num_classes)
+        )
+    def forward(self, x):
+        x = self.features(x)
+        x = torch.flatten(x, 1)
+        x = self.classifier(x)
+        return x
 
 def get_model(args, pretrain=True):
     model = None
