@@ -38,4 +38,5 @@ if __name__ == "__main__":
     print("{} dataset load complete!!".format(args.dataset))
 
     # step 2
+    print("use {} for evaluating".format(args.device))
     evaluate(model, test_data, args)

@@ -62,6 +62,7 @@ if __name__ == "__main__":
     print("{} model, {} dataset load complete!!".format(args.model, args.dataset))
 
     # step 3
+    print("use {} for training".format(args.device))
     training(model, train_data, args)
     print("Finish training")
 

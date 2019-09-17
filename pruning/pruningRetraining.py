@@ -77,6 +77,7 @@ if __name__ == "__main__":
     print("{} dataset load complete!!".format(args.dataset))
 
     # step 2
+    print("use {} for pruning & retraining".format(args.device))
     for epoch in range(args.pruningEpochs):
         epoch = epoch+1 # 0~9 -> 1~10
         print("start pruning {} epoch".format(epoch))
