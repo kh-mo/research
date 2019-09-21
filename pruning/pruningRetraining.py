@@ -30,16 +30,15 @@ def get_cut_point(model, args):
     all_param.sort()
     return all_param[cut_point]
 
-def pruning(model, args):
+def pruning(model, cut_point):
     prune_model = {}
     prune_position_list = []
-    threshold = args.pruningThreshold
+    threshold = cut_point
 
     for name, tensor in model.state_dict().items():
-        prune_position = torch.clamp(tensor, min=threshold)
-        prune_position[prune_position > threshold] = 1
-        prune_model[name] = tensor * prune_position
-        prune_position_list.append(prune_position)
+        tensor[tensor <= threshold] = 0
+        prune_model[name] = tensor
+        prune_position_list.append(tensor)
 
     new_state_dict = OrderedDict(prune_model)
     model.load_state_dict(new_state_dict, strict=False)
@@ -68,11 +67,10 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--model", type=str)
     parser.add_argument("--dataset", type=str)
-    parser.add_argument("--pruningEpochs", type=int, default=10)
-    parser.add_argument("--pruningThreshold", type=int, default=0.1, help="Percentage expressed as a decimal point")
+    parser.add_argument("--pruningThreshold", type=float, default=0.1, help="Percentage expressed as a decimal point")
     parser.add_argument("--batch_size", type=int, default=256)
     parser.add_argument("--learningRate", type=int, default=0.0002)
-    parser.add_argument("--retrainingEpochs", type=int, default=10)
+    parser.add_argument("--retrainingEpochs", type=int, default=100)
     args = parser.parse_args()
     args.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
@@ -87,18 +85,16 @@ if __name__ == "__main__":
 
     # step 2
     print("use {} for pruning & retraining".format(args.device))
-    args.pruningThreshold = get_cut_point(model, args)
-    for epoch in range(args.pruningEpochs):
-        epoch = epoch+1 # 0~9 -> 1~10
-        print("start pruning {} epoch".format(epoch))
-        prune_position_list = pruning(model, args)
+    print("start pruning epoch\n")
+    cut_point = get_cut_point(model, args)
+    prune_position_list = pruning(model, cut_point)
 
-        # step 3
-        retraining(model, train_data, prune_position_list, args)
+    # step 3
+    retraining(model, train_data, prune_position_list, args)
 
-        # step 4
-        evaluate(model, test_data, args)
+    # step 4
+    acc, param_count = evaluate(model, test_data, args)
 
-        # step 5
-        torch.save(model.state_dict(), os.path.join(os.getcwd(), "models/{}_{}_epoch_pruned".format(args.model, epoch)))
-        print("Complete {} epoch model saving\n".format(epoch))
+    # step 5
+    torch.save(model.state_dict(), os.path.join(os.getcwd(), "models/{}_{}_pruningThreshold_{}_acc_{}_param_pruned".format(args.model, args.pruningThreshold, acc, param_count)))
+    print("Complete epoch model saving")

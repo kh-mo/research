@@ -16,6 +16,4 @@ def evaluate(model, test_data, args):
         count += len(np.nonzero(i.detach().cpu().numpy())[0])
 
     print("Accuracy : {}, Parameters : {}".format(total_acc, count))
-
-def visualization():
-    return
+    return total_acc, count
