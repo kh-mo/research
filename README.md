@@ -48,5 +48,5 @@ python baseline.py --model="lenet_300_100" --dataset="mnist"
 - possible example : {lenet_300_100-mnist}, {lenet_5-mnist}
 - to be : {alexnet-imagenet}, {vggnet-imagenet}
 ```shell
-python PruningRetraining.py --model="lenet_300_100" --dataset="mnist"
+python PruningRetraining.py --model="lenet_300_100" --dataset="mnist" --pruningThreshold=0.5
 ```
