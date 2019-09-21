@@ -21,6 +21,15 @@ from models import get_model
 from datasets import get_dataset
 from utils import evaluate
 
+def get_cut_point(model, args):
+    all_param = []
+    for i in model.parameters():
+        all_param += torch.flatten(i).tolist()
+    threshold = args.pruningThreshold
+    cut_point = round(len(all_param) * threshold)
+    all_param.sort()
+    return all_param[cut_point]
+
 def pruning(model, args):
     prune_model = {}
     prune_position_list = []
@@ -60,7 +69,7 @@ if __name__ == "__main__":
     parser.add_argument("--model", type=str)
     parser.add_argument("--dataset", type=str)
     parser.add_argument("--pruningEpochs", type=int, default=10)
-    parser.add_argument("--pruningThreshold", type=int, default=0)
+    parser.add_argument("--pruningThreshold", type=int, default=0.1, help="Percentage expressed as a decimal point")
     parser.add_argument("--batch_size", type=int, default=256)
     parser.add_argument("--learningRate", type=int, default=0.0002)
     parser.add_argument("--retrainingEpochs", type=int, default=10)
@@ -78,6 +87,7 @@ if __name__ == "__main__":
 
     # step 2
     print("use {} for pruning & retraining".format(args.device))
+    args.pruningThreshold = get_cut_point(model, args)
     for epoch in range(args.pruningEpochs):
         epoch = epoch+1 # 0~9 -> 1~10
         print("start pruning {} epoch".format(epoch))
