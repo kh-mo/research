@@ -96,5 +96,5 @@ if __name__ == "__main__":
     acc, param_count = evaluate(model, test_data, args)
 
     # step 5
-    torch.save(model.state_dict(), os.path.join(os.getcwd(), "models/{}_{}_pruningThreshold_{}_acc_{}_param_pruned".format(args.model, args.pruningThreshold, acc, param_count)))
+    torch.save(model.state_dict(), os.path.join(os.getcwd(), "models/{}_{0:.2f}_pruningThreshold_{}_acc_{}_param_pruned".format(args.model, args.pruningThreshold, acc, param_count)))
     print("Complete epoch model saving")

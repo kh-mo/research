@@ -16,6 +16,10 @@ Lenet_300_100 Pruned | 92.37% | 108K(108,026) | 2x
 Lenet_5 Ref | 98.32% | 29K(29,456) | 
 Lenet_5 Pruned | 95.05% | 10K(10,395) | 2x 
 
+Accuracy Graph according to Pruning Rate.
+
+<img src = 'saved_image/graph1_image.png'>
+
 All results are experimented by Imagenet-2012.
 
 *Model* | *Accuracy* | *Parameters* | *Compression Rate*
@@ -49,4 +53,9 @@ python baseline.py --model="lenet_300_100" --dataset="mnist"
 - to be : {alexnet-imagenet}, {vggnet-imagenet}
 ```shell
 python PruningRetraining.py --model="lenet_300_100" --dataset="mnist" --pruningThreshold=0.5
+```
+
+### Visualizing
+```shell
+python visualization.py --model="lenet_300_100" --pruningList 0.4 0.5 0.6 0.7 0.8 0.9
 ```
