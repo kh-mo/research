@@ -14,9 +14,9 @@ Non-pruned parameters mean non-zero parameters.
 Lenet_300_100 Ref | 97.97% | 266K(266,610) | 
 Lenet_300_100 Pruned | 92.37% | 108K(108,026) | 2x 
 Lenet_5 Ref | 98.32% | 29K(29,456) | 
-Lenet_5 Pruned | 95.05% | 10K(10,395) | 2x 
+Lenet_5 Pruned | 93.28% | 2K(2,945) | 14x 
 
-Accuracy Graph according to Pruning Rate.
+Accuracy Graph for threshold determined by percentage of initial network weights.
 
 <img src = 'saved_image/graph1.JPG'>
 
@@ -52,10 +52,10 @@ python baseline.py --model="lenet_300_100" --dataset="mnist"
 - possible example : {lenet_300_100-mnist}, {lenet_5-mnist}
 - to be : {alexnet-imagenet}, {vggnet-imagenet}
 ```shell
-python PruningRetraining.py --model="lenet_300_100" --dataset="mnist" --pruningThreshold=0.5
+python PruningRetraining.py --model="lenet_300_100" --dataset="mnist" --pruningThresholds 0.5 0.6 0.7 0.8
 ```
 
 ### Visualizing
 ```shell
-python visualization.py --model="lenet_300_100" --pruningList 0.4 0.5 0.6 0.7 0.8 0.9
+python visualization.py --models lenet_300_100 lenet_5 --pruningList 0.4 0.5 0.6 0.7 0.8 0.9
 ```
