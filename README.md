@@ -18,7 +18,7 @@ Lenet_5 Pruned | 95.05% | 10K(10,395) | 2x
 
 Accuracy Graph according to Pruning Rate.
 
-<img src = 'saved_image/graph1_image.png'>
+<img src = 'saved_image/graph1.JPG'>
 
 All results are experimented by Imagenet-2012.
 
