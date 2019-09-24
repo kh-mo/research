@@ -10,13 +10,13 @@ if __name__ == "__main__":
 
     file_list = os.listdir(os.path.join(os.getcwd(), "models"))
 
-    acc_list = [[]] * len(args.models)
-    pruning_rate_list = [[]] * len(args.models)
+    acc_list = [[] for i in range(len(args.models))]
+    pruning_rate_list = [[] for i in range(len(args.models))]
     for model_idx, model in enumerate(args.models):
         for pruning_rate in args.pruningList:
             pruning_rate = '{0:.2f}'.format(pruning_rate)
+            file_infor = model + "_" + pruning_rate
             for name in file_list:
-                file_infor = model + "_" + pruning_rate
                 if file_infor in name:
                     pruning_rate_list[model_idx].append(pruning_rate)
                     acc = float(name.replace(file_infor+"_pruningThreshold_","").split("_acc_")[0])

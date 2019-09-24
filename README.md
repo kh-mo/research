@@ -12,13 +12,13 @@ Non-pruned parameters mean non-zero parameters.
 *Model* | *Accuracy* | *Parameters* | *Compression Rate*
 :---: | :---: | :---: | :---:  
 Lenet_300_100 Ref | 97.97% | 266K(266,610) | 
-Lenet_300_100 Pruned | 92.37% | 108K(108,026) | 2x 
+Lenet_300_100 Pruned | 92.46% | 15K(15,023) | 17x 
 Lenet_5 Ref | 98.32% | 29K(29,456) | 
-Lenet_5 Pruned | 93.28% | 2K(2,945) | 14x 
+Lenet_5 Pruned | 95.15% | 1K(1,603) | 18x 
 
 Accuracy Graph for threshold determined by percentage of initial network weights.
 
-<img src = 'saved_image/graph1.JPG'>
+<img src = 'saved_image/graph_image1.JPG'>
 
 All results are experimented by Imagenet-2012.
 
