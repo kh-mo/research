@@ -8,14 +8,21 @@ if __name__ == "__main__":
     parser.add_argument("--pruningList", type=float, nargs="+")
     args = parser.parse_args()
 
+    # all file name in saved model folder
     file_list = os.listdir(os.path.join(os.getcwd(), "models"))
 
     acc_list = [[] for i in range(len(args.models))]
     pruning_rate_list = [[] for i in range(len(args.models))]
+
+    # model name
     for model_idx, model in enumerate(args.models):
+
+        # pruning rate
         for pruning_rate in args.pruningList:
             pruning_rate = '{0:.2f}'.format(pruning_rate)
             file_infor = model + "_" + pruning_rate
+
+            # match between file name and model + pruning rate
             for name in file_list:
                 if file_infor in name:
                     pruning_rate_list[model_idx].append(pruning_rate)
