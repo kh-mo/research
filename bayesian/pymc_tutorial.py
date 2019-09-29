@@ -19,21 +19,24 @@ plt.xlim(0, n_count_data)
 import pymc3 as pm
 
 alpha = 1.0 / count_data.mean()
-lambda_1 = pm.Exponential("lambda_1", alpha)
-lambda_2 = pm.Exponential("lambda_2", alpha)
-
-tau = pm.DiscreteUniform("tau", lower=0, upper=n_count_data)
-
+lambda_1 = pm.Exponential.dist(alpha, "lambda_1") # lambda_1 = pm.Exponential("lambda_1", alpha)
+lambda_2 = pm.Exponential.dist(alpha, "lambda_2") # lambda_2 = pm.Exponential("lambda_2", alpha)
+tau = pm.DiscreteUniform.dist(lower=0, upper=n_count_data) # tau = pm.DiscreteUniform("tau", lower=0, upper=n_count_data)
 print("Random output:", tau.random(), tau.random(), tau.random())
 
-@pm.deterministic
+@pm.Deterministic
 def lambda_(tau=tau, lambda_1=lambda_1, lambda_2=lambda_2):
     out = np.zeros(n_count_data)
     out[:tau] = lambda_1
     out[tau:] = lambda_2
     return out
 
-observation = pm.Poisson("obs", lambda_, value=count_data, observed=True)
+out = np.zeros(n_count_data)
+threshold = tau.random()
+out[:threshold] = lambda_1.random()
+out[threshold:] = lambda_2.random()
+
+observation = pm.Poisson.dist(mu=out) # observation = pm.Poisson("obs", lambda_, value=count_data, observed=True)
 model = pm.Model([observation, lambda_1, lambda_2, tau])
 
 mcmc = pm.MCMC(model)
