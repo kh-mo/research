@@ -24,7 +24,7 @@ All results are experimented by Imagenet-2012.
 
 *Model* | *Accuracy* | *Parameters* | *Compression Rate*
 :---: | :---: | :---: | :---:
-Alexnet Ref | OO.OO% | 000K() | 
+Alexnet Ref | 54.85% | 61,100K(61,100,840) |
 Alexnet Pruned | OO.OO% | 000K() | 00x 
 VGGnet_16 Ref | OO.OO% | 000K() | 
 VGGnet_16 Pruned | OO.OO% | 000K() | 00x
