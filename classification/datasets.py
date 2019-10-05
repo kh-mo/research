@@ -39,7 +39,16 @@ def get_dataset(args):
                               download=True,
                               transform=transforms.Compose([transforms.ToTensor()]))
         dataset = (train, test)
-
+    elif args.dataset == "cifar10":
+        train = datasets.CIFAR10(root=dataset_folder,
+                                 train=True,
+                                 download=True,
+                                 transform=transforms.Compose([transforms.ToTensor()]))
+        test = datasets.CIFAR10(root=dataset_folder,
+                                train=False,
+                                download=True,
+                                transform=transforms.Compose([transforms.ToTensor()]))
+        dataset = (train, test)
     else:
         warnings.warn("{} dataset does not exist.".format(args.dataset))
 

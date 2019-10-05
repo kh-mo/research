@@ -62,6 +62,14 @@ python visualization.py --models lenet_300_100 lenet_5 --pruningList 0.4 0.5 0.6
 
 ## Topic2 - classification
 
+### Result
+
+All results are experimented by MNIST.
+
+*Model* | *Accuracy* | *Parameters* | *Compression Rate*
+:---: | :---: | :---: | :---:
+Alexnet | 98.02% | 61,227K(61,227,280) |
+
 #### Get Baseline Result
 - Model : alexnet
 - Dataset : mnist

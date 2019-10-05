@@ -23,10 +23,10 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--model", type=str)
     parser.add_argument("--dataset", type=str)
-    parser.add_argument("--epochs", type=int, default=100)
+    parser.add_argument("--epochs", type=int, default=10)
     parser.add_argument("--batch_size", type=int, default=256)
     parser.add_argument("--do_training", type=bool, default=True)
-    parser.add_argument("--learningRate", type=int, default=0.0002)
+    parser.add_argument("--learningRate", type=int, default=0.0001)
     args = parser.parse_args()
     args.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
@@ -46,7 +46,7 @@ if __name__ == "__main__":
     # step 3
     if model.training:
         print("start training")
-        training(model, train_data, test_data, args)
+        training(model, train_data, args)
         print("training done.")
 
     # step 4

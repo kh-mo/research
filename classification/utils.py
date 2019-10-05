@@ -51,7 +51,7 @@ class up_scaling(nn.Module):
         x = self.insert_features(x)
         return x
 
-def training(model, train_dataset, test_dataset, args):
+def training(model, train_dataset, args):
     loss_function = nn.CrossEntropyLoss().to(args.device)
     optim = torch.optim.Adam(model.parameters(), lr=args.learningRate)
 
@@ -67,7 +67,6 @@ def training(model, train_dataset, test_dataset, args):
 
         loss = sum(loss_list) / len(loss_list)
         print("retraining by {}, {} epoch, loss : {}".format(args.dataset, epoch + 1, loss))
-        evaluate(model, test_dataset, args)
 
 def evaluate(model, test_data, args):
     # get model accuracy
