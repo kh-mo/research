@@ -2,7 +2,7 @@
 
 This repository is used to test different topics what i want to experiment with.
 
-### Topic1 - pruning
+## Topic1 - pruning
 
 ### Result
 
@@ -29,33 +29,46 @@ Alexnet Pruned | OO.OO% | 000K() | 00x
 VGGnet_16 Ref | OO.OO% | 000K() | 
 VGGnet_16 Pruned | OO.OO% | 000K() | 00x
 
-## Getting Start
-### Get lenet model file
+### Getting Start
+#### Get lenet model file
 - Get lenet_300_100 or lenet_5 model 
 - Possible example : {lenet_300_100-mnist}, {lenet_5-mnist}
 ```shell
-python lenetClassifier.py --model="lenet_300_100" --dataset="mnist"
+python lenetClassifier.py --model=lenet_300_100 --dataset=mnist
 ```
 
-### Get Baseline Result
+#### Get Baseline Result
 - Model : lenet, alexnet
 - Dataset : mnist, imagenet
 - Depending dimension of the input image, there are possible combinations of datasets and models.
 - Possible example : {lenet_300_100-mnist}, {lenet_5-mnist}
 - to be : {alexnet-imagenet}, {vggnet-imagenet}
 ```shell
-python baseline.py --model="lenet_300_100" --dataset="mnist"
+python baseline.py --model=lenet_300_100 --dataset=mnist
 ```
 
-### Pruning & Retraining
+#### Pruning & Retraining
 - Depending dimension of the input image, there are possible combinations of datasets and models.
 - possible example : {lenet_300_100-mnist}, {lenet_5-mnist}
 - to be : {alexnet-imagenet}, {vggnet-imagenet}
 ```shell
-python PruningRetraining.py --model="lenet_300_100" --dataset="mnist" --pruningThresholds 0.5 0.6 0.7 0.8
+python PruningRetraining.py --model=lenet_300_100 --dataset=mnist --pruningThresholds 0.5 0.6 0.7 0.8
 ```
 
-### Visualizing
+#### Visualizing
 ```shell
 python visualization.py --models lenet_300_100 lenet_5 --pruningList 0.4 0.5 0.6 0.7 0.8 0.9
 ```
+
+## Topic2 - classification
+
+#### Get Baseline Result
+- Model : alexnet
+- Dataset : mnist
+- Depending dimension of the input image, there are possible combinations of datasets and models.
+```shell
+python baseline.py --model=alexnet --dataset=mnist
+```
+
+## Reference
+- [Learning both Weights and Connections for Efficient Neural Networks](https://papers.nips.cc/paper/5784-learning-both-weights-and-connections-for-efficient-neural-network.pdf), accepted NIPS 2015
