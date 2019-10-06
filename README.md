@@ -66,13 +66,19 @@ python visualization.py --models lenet_300_100 lenet_5 --pruningList 0.4 0.5 0.6
 
 All results are experimented by MNIST.
 
-*Model* | *Accuracy* | *Parameters* | *Compression Rate*
-:---: | :---: | :---: | :---:
-Alexnet | 98.02% | 61,227K(61,227,280) |
+*Model* | *Accuracy* | *Parameters* | *Epoch* |
+:---: | :---: | :---: | :---: |
+Alexnet | 97.89% | 61,227K(61,227,280) | 10 |
+
+All results are experimented by CIFAR-10.
+
+*Model* | *Accuracy* | *Parameters* | *Epoch* |
+:---: | :---: | :---: | :---: |
+Alexnet | 59.35% | 61,446K(61,446,094) | 20 |
 
 #### Get Baseline Result
 - Model : alexnet
-- Dataset : mnist
+- Dataset : mnist, cifar10
 - Depending dimension of the input image, there are possible combinations of datasets and models.
 ```shell
 python baseline.py --model=alexnet --dataset=mnist
