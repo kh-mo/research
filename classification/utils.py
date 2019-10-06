@@ -56,6 +56,7 @@ class up_scaling(nn.Module):
 def training(model, train_dataset, args):
     loss_function = nn.CrossEntropyLoss().to(args.device)
     optim = torch.optim.Adam(model.parameters(), lr=args.learningRate)
+    scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optim, T_max=2, eta_min=0.00001)
 
     for epoch in range(args.epochs):
         loss_list = []
@@ -68,6 +69,7 @@ def training(model, train_dataset, args):
             loss_list.append(loss.item())
 
         loss = sum(loss_list) / len(loss_list)
+        scheduler.step(epoch+1)
         print("retraining by {}, {} epoch, loss : {}".format(args.dataset, epoch + 1, loss))
 
 def evaluate(model, test_data, args):

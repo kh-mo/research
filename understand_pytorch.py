@@ -44,3 +44,19 @@ input_var = ((input-input_mean)**2).sum(dim=0) / (input.shape[0]-1)
 var_function_result = torch.var(input, dim=0, unbiased=True)
 print(input_var)
 print(var_function_result)
+
+'''
+learning rate scheduling
+example : cosine annealing, iclr 2017
+'''
+
+class model(nn.Module):
+    def __init__(self):
+        super(model, self).__init__()
+    def forward(self, x):
+        return x
+
+learning_rate_max = 0.01
+learning_rate_min = 0.00001
+optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate_max)
+torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=0.01, eta_min=learning_rate_min)
