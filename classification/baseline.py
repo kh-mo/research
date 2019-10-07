@@ -26,7 +26,7 @@ if __name__ == "__main__":
     parser.add_argument("--epochs", type=int, default=10)
     parser.add_argument("--batch_size", type=int, default=256)
     parser.add_argument("--do_training", type=bool, default=True)
-    parser.add_argument("--learningRate", type=int, default=0.01)
+    parser.add_argument("--learningRate", type=int, default=0.0001)
     args = parser.parse_args()
     args.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
@@ -54,5 +54,5 @@ if __name__ == "__main__":
     acc, param_count = evaluate(model, test_data, args)
 
     # step 5
-    torch.save(model.state_dict(), os.path.join(os.getcwd(), "models/{}_acc_{}".format(args.model, acc)))
+    torch.save(model.state_dict(), os.path.join(os.getcwd(), "models/{}_{}_acc_{}".format(args.model, args.dataset, acc)))
     print("Complete model saving")
