@@ -3,10 +3,9 @@ pretrain model : https://pytorch.org/docs/stable/torchvision/models.html
 dataset : https://pytorch.org/docs/stable/torchvision/datasets.html
 
 step 1. get model, dataset
-step 2. modify model
-step 3. training(option)
-step 4. evaluate
-step 5. save model
+step 2. training(option)
+step 3. evaluate
+step 4. save model
 '''
 
 import os
@@ -26,7 +25,7 @@ if __name__ == "__main__":
     parser.add_argument("--epochs", type=int, default=10)
     parser.add_argument("--batch_size", type=int, default=256)
     parser.add_argument("--do_training", type=bool, default=True)
-    parser.add_argument("--learningRate", type=int, default=0.0001)
+    parser.add_argument("--learningRate", type=int, default=0.001)
     args = parser.parse_args()
     args.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
@@ -40,19 +39,15 @@ if __name__ == "__main__":
     print("{} dataset load complete!!".format(args.dataset))
 
     # step 2
-    model = modify_model(model, args)
-    print("modify model done.")
-
-    # step 3
     if model.training:
         print("start training")
         training(model, train_data, args)
         print("training done.")
 
-    # step 4
+    # step 3
     print("use {} for evaluating".format(args.device))
     acc, param_count = evaluate(model, test_data, args)
 
-    # step 5
+    # step 4
     torch.save(model.state_dict(), os.path.join(os.getcwd(), "models/{}_{}_acc_{}".format(args.model, args.dataset, acc)))
     print("Complete model saving")
