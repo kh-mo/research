@@ -64,17 +64,16 @@ python visualization.py --models lenet_300_100 lenet_5 --pruningList 0.4 0.5 0.6
 
 ### Result
 
-All results are experimented by MNIST.
+All results are experimented.
 
-*Model* | *Accuracy* | *Parameters* | *Epoch* |
-:---: | :---: | :---: | :---: |
-Alexnet | 97.89% | 61,227K(61,227,280) | 10 |
-
-All results are experimented by CIFAR-10.
-
-*Model* | *Accuracy* | *Parameters* | *Epoch* |
-:---: | :---: | :---: | :---: |
-Alexnet | 59.35% | 61,446K(61,446,094) | 20 |
+*Dataset* | *Architecture* | *DNN Acc* | *Bayesian DNN Acc(MOPED)* | *Bayesian DNN Acc(random prior)* |
+:---: | :---: | :---: | :---: | :---: |
+MNIST | Lenet | 00.00% | 00.00% | 00.00% |
+F-MNIST | SCNN | 00.00% | 00.00% | 00.00% |
+CIFAR-10 | Alexnet | 00.00% | 00.00% | 00.00% |
+CIFAR-10 | Vggnet | 00.00% | 00.00% | 00.00% |
+CIFAR-10 | Resnet-20 | 00.00% | 00.00% | 00.00% |
+CIFAR-10 | Resnet-50 | 00.00% | 00.00% | 00.00% |
 
 #### Get Baseline Result
 - Model : alexnet
