@@ -16,7 +16,7 @@ from torch.utils.data import DataLoader
 
 from models import get_model
 from datasets import get_dataset
-from utils import evaluate, modify_model, training
+from utils import evaluate, training
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
