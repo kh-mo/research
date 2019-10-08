@@ -60,3 +60,25 @@ learning_rate_max = 0.01
 learning_rate_min = 0.00001
 optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate_max)
 torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=0.01, eta_min=learning_rate_min)
+
+'''
+model에 layer추가하기 : nn.Sequential 사용해서 묶어준다
+'''
+
+class new_layer(nn.Module):
+    def __init__(self):
+        super(new_layer, self).__init__()
+        self.insert_classifier = nn.Sequential()
+    def forward(self, x):
+        return x
+
+class up_scaling(nn.Module):
+    def __init__(self):
+        super(up_scaling, self).__init__()
+        self.insert_features = nn.Sequential(
+        )
+
+    def forward(self, x):
+        return x
+
+nn.Sequential(up_scaling(), model, new_layer())
