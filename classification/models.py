@@ -38,6 +38,30 @@ class Lenet(nn.Module):
         x = self.classifier(x)
         return x
 
+class SCNN(nn.Module):
+    def __init__(self, num_classes=10):
+        super(SCNN, self).__init__()
+        self.features = nn.Sequential(
+            nn.Conv2d(1, 6, kernel_size=3),
+            nn.ReLU(),
+            nn.MaxPool2d(kernel_size=2, stride=2),
+            nn.Conv2d(6, 16, kernel_size=3),
+            nn.ReLU(),
+            nn.MaxPool2d(kernel_size=2, stride=2),
+        )
+        self.classifier = nn.Sequential(
+            nn.Dropout(),
+            nn.Linear(400, 120),
+            nn.ReLU(),
+            nn.Dropout(),
+            nn.Linear(120, num_classes)
+        )
+    def forward(self, x):
+        x = self.features(x)
+        x = torch.flatten(x, 1)
+        x = self.classifier(x)
+        return x
+
 def get_model(args, pretrain=True):
     model = None
     if args.model == "alexnet":
@@ -54,10 +78,13 @@ def get_model(args, pretrain=True):
         print("model download from pytorch hub(https://pytorch.org/docs/stable/torchvision/models.html)")
     elif args.model == "lenet":
         model = Lenet().to(args.device)
-        if check_model(args.model):
-            model.load_state_dict(torch.load(os.path.join(os.getcwd(), "models/{}".format(args.model))))
-        else:
-            warnings.warn("pretrained {} model does not exist.".format(args.model))
+        # pretrain lenet 사용 시 다시 고려(19.10.09)
+        # if check_model(args.model):
+        #     model.load_state_dict(torch.load(os.path.join(os.getcwd(), "models/{}".format(args.model))))
+        # else:
+        #     warnings.warn("pretrained {} model does not exist.".format(args.model))
+    elif args.model == "scnn":
+        model = SCNN().to(args.device)
     else:
         warnings.warn("{} model does not exist.".format(args.model))
 
@@ -68,5 +95,6 @@ def get_model(args, pretrain=True):
 
     return model
 
-def check_model(model_name):
-    return os.path.isfile(os.path.join(os.getcwd(), "models/{}".format(model_name)))
+# pretrain lenet 사용 시 다시 고려(19.10.09)
+# def check_model(model_name):
+#     return os.path.isfile(os.path.join(os.getcwd(), "models/{}".format(model_name)))
