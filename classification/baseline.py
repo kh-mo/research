@@ -49,5 +49,5 @@ if __name__ == "__main__":
     acc, param_count = evaluate(model, test_data, args)
 
     # step 4
-    torch.save(model.state_dict(), os.path.join(os.getcwd(), "models/{}_{}_acc_{}".format(args.model, args.dataset, acc)))
+    torch.save(model.state_dict(), os.path.join(os.getcwd(), "models/{}_{}_acc_{}_epoch_{}".format(args.model, args.dataset, acc, args.epochs)))
     print("Complete model saving")
