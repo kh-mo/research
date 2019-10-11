@@ -66,18 +66,21 @@ python visualization.py --models lenet_300_100 lenet_5 --pruningList 0.4 0.5 0.6
 
 All results are experimented.
 
-*Dataset* | *Architecture* | *DNN Acc* | *Bayesian DNN Acc(MOPED)* | *Bayesian DNN Acc(random prior)* |
-:---: | :---: | :---: | :---: | :---: |
-MNIST | Lenet | 00.00% | 00.00% | 00.00% |
-F-MNIST | SCNN | 00.00% | 00.00% | 00.00% |
-CIFAR-10 | Alexnet | 00.00% | 00.00% | 00.00% |
-CIFAR-10 | Vggnet | 00.00% | 00.00% | 00.00% |
-CIFAR-10 | Resnet-20 | 00.00% | 00.00% | 00.00% |
-CIFAR-10 | Resnet-50 | 00.00% | 00.00% | 00.00% |
+*Dataset* | *Model* | *DNN Acc* | *BayesianNN Acc(MOPED)* | *BayesianNN Acc(random prior)* | *Epochs/batch* |
+:---: | :---: | :---: | :---: | :---: | :---: |
+MNIST | Lenet | 97.22% | 00.00% | 00.00% | 30/256 |
+F-MNIST | Lenet | 85.41% | 00.00% | 00.00% | 30/256 |
+MNIST | SCNN | 96.66% | 00.00% | 00.00% | 30/256 |
+F-MNIST | SCNN | 83.87% | 00.00% | 00.00% | 30/256 |
+CIFAR-10 | Alexnet | 82.73% | 00.00% | 00.00% | 30/256 |
+CIFAR-10 | Vggnet | 78.14% | 00.00% | 00.00% | 120/64 |
+CIFAR-10 | Vggnet | 78.78% | 00.00% | 00.00% | 30/64 |
+CIFAR-10 | Resnet-18 | 94.05% | 00.00% | 00.00% | 30/256 |
+CIFAR-10 | Resnet-34 | 94.26% | 00.00% | 00.00% | 30/256 |
 
 #### Get Baseline Result
-- Model : alexnet
-- Dataset : mnist, cifar10
+- Model : lenet, scnn, alexnet
+- Dataset : mnist, fmnist, cifar10
 - Depending dimension of the input image, there are possible combinations of datasets and models.
 ```shell
 python baseline.py --model=alexnet --dataset=mnist
