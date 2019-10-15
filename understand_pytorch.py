@@ -82,3 +82,17 @@ class up_scaling(nn.Module):
         return x
 
 nn.Sequential(up_scaling(), model, new_layer())
+
+'''
+negative log likelihood : -q * log p
+p = softmax(tensor)
+q = class number
+'''
+
+import torch
+import torch.nn.functional as f
+
+input = torch.randn([2,10])
+target = torch.tensor([3,4])
+f.nll_loss(f.log_softmax(input,dim=1), target)
+
