@@ -22,6 +22,20 @@ class Gaussian(object):
                 - torch.log(self.sigma)
                 - (((input - self.mu)/self.sigma)**2)/2).sum()
 
+class ScaleMixturePrior(nn.Module):
+    def __init__(self, pi, sigma1, sigma2):
+        super(ScaleMixturePrior, self).__init__()
+        self.pi = pi
+        self.sigma1 = torch.FloatTensor([math.exp(sigma1)]).to(device)
+        self.sigma2 = torch.FloatTensor([math.exp(sigma2)]).to(device)
+        self.gaussian1 = torch.distributions.normal.Normal(0, self.sigma1)
+        self.gaussian2 = torch.distributions.normal.Normal(0, self.sigma2)
+
+    def log_prob(self, input):
+        prob1 = torch.exp(self.gaussian1.log_prob(input))
+        prob2 = torch.exp(self.gaussian2.log_prob(input))
+        return (torch.log(self.pi * prob1 + (1 - self.pi) * prob2)).sum()
+
 class BayesianLinear(nn.Module):
     def __init__(self, in_dim, out_dim):
         super(BayesianLinear, self).__init__()
@@ -35,23 +49,38 @@ class BayesianLinear(nn.Module):
         self.bias_rho = nn.Parameter(torch.Tensor(self.out_dim).uniform_(-0.2, 0.2))
         self.bias = Gaussian(self.bias_mu, self.bias_rho)
 
+        self.log_variational_posterior = 0
+        self.log_prior = 0
+
+        self.pi = 0.5
+        self.sigma1 = 0
+        self.sigma2 = -6
+        self.weight_prior = ScaleMixturePrior(self.pi, self.sigma1, self.sigma2)
+        self.bias_prior = ScaleMixturePrior(self.pi, self.sigma1, self.sigma2)
+
     def forward(self, input):
         weight = self.weight.sample()
         bias = self.bias.sample()
+        self.log_variational_prior = self.weight.log_prob(weight) + self.bias.log_prob(bias)
+        self.log_prior = self.weight_prior.log_prob(weight) + self.bias_prior.log_prob(bias)
+
         return f.linear(input, weight, bias)
 
 class bayesian(nn.Module):
     def __init__(self, num_classes=10):
         super(bayesian, self).__init__()
-        self.linear1 = BayesianLinear(784, 10),
+        self.linear1 = BayesianLinear(784, 10)
 
     def forward(self, x):
         x = torch.flatten(x, 1) #1
         x = self.linear1(x) #2
         return x
 
-    def log_variational_posterior(self, input):
-        return self.linear1.weight.log_prior(input) + self.linear1.bias.log_prior(input)
+    def log_variational_posterior(self):
+        return self.linear1.log_variational_posterior
+
+    def log_prior(self):
+        return self.linear1.log_prior
 
 if __name__ == "__main__":
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
@@ -62,5 +91,6 @@ if __name__ == "__main__":
 
     negative_log_likehood = f.nll_loss(f.log_softmax(output, dim=1), target.to(device)).to(device)
     log_variational_posterior = model.log_variational_posterior()
-    log_prior = 0
+    log_prior = model.log_prior()
     loss = log_variational_posterior - log_prior + negative_log_likehood
+
