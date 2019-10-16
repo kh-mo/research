@@ -2,6 +2,7 @@ import torch
 import numpy as np
 import torch.nn as nn
 import torch.nn.functional as f
+from models import BayesianLinear
 
 def training(model, train_dataset, args):
     loss_function = None
@@ -19,11 +20,9 @@ def training(model, train_dataset, args):
             loss = 0
             if args.do_bayesian:
                 negative_log_likehood = loss_function(f.log_softmax(model_output, dim=1), target.to(args.device))
-                # log_variational_posterior = model.log_variational_posterior()
-                # log_prior = model.log_prior()
-                model.classifier._modules
-                # loss = log_variational_posterior - log_prior + negative_log_likehood
-                loss = negative_log_likehood
+                log_variational_posterior = get_log_variational_posterior(model)
+                log_prior = get_log_prior(model)
+                loss = log_variational_posterior - log_prior + negative_log_likehood
             else:
                 loss = loss_function(model_output, target.to(args.device))
             optim.zero_grad()
@@ -39,8 +38,9 @@ def evaluate(model, test_data, args):
     # get model accuracy
     pred = []
     label = []
+    model.eval()
     for test_img, test_label in test_data:
-        pred += torch.argmax(model(test_img.to(args.device)),dim=1).tolist()
+        pred += torch.argmax(model(test_img.to(args.device)), dim=1).tolist()
         label += test_label.tolist()
     total_acc = sum([1 if pred[i] == label[i] else 0 for i in range(len(pred))]) / len(pred)
 
@@ -51,3 +51,25 @@ def evaluate(model, test_data, args):
 
     print("Accuracy : {}, Parameters : {}".format(total_acc, count))
     return total_acc, count
+
+def get_log_variational_posterior(model):
+    log_variational_posterior = 0
+    for name, module in model._modules.items():
+        if isinstance(module, BayesianLinear):
+            log_variational_posterior += model._modules[name].log_variational_posterior
+            continue
+        for sub_name, sub_module in module._modules.items():
+            if isinstance(sub_module, BayesianLinear):
+                log_variational_posterior += model._modules[name]._modules[sub_name].log_variational_posterior
+    return log_variational_posterior
+
+def get_log_prior(model):
+    log_prior = 0
+    for name, module in model._modules.items():
+        if isinstance(module, BayesianLinear):
+            log_prior += model._modules[name].log_prior
+            continue
+        for sub_name, sub_module in module._modules.items():
+            if isinstance(sub_module, BayesianLinear):
+                log_prior += model._modules[name]._modules[sub_name].log_prior
+    return log_prior

@@ -53,15 +53,15 @@ class BayesianLinear(nn.Module):
         self.log_prior = 0
 
         self.pi = 0.5
-        self.sigma1 = 0
-        self.sigma2 = -6
+        self.sigma1 = torch.exp(torch.tensor(-1.)).item()
+        self.sigma2 = torch.exp(torch.tensor(-6.)).item()
         self.weight_prior = ScaleMixturePrior(self.pi, self.sigma1, self.sigma2)
         self.bias_prior = ScaleMixturePrior(self.pi, self.sigma1, self.sigma2)
 
     def forward(self, input):
         weight = self.weight.sample()
         bias = self.bias.sample()
-        self.log_variational_prior = self.weight.log_prob(weight) + self.bias.log_prob(bias)
+        self.log_variational_posterior = self.weight.log_prob(weight) + self.bias.log_prob(bias)
         self.log_prior = self.weight_prior.log_prob(weight) + self.bias_prior.log_prob(bias)
 
         return f.linear(input, weight, bias)

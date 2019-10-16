@@ -106,8 +106,8 @@ class Gaussian(object):
     def __init__(self, mu, rho, args):
         super(Gaussian, self).__init__()
         self.args = args
-        self.mu = mu
-        self.rho = rho
+        self.mu = mu.to(args.device)
+        self.rho = rho.to(args.device)
         self.normal = torch.distributions.normal.Normal(loc=0, scale=1)
         self.sigma = 0
 
@@ -152,17 +152,22 @@ class BayesianLinear(nn.Module):
         self.log_prior = 0
 
         self.pi = 0.5
-        self.sigma1 = 0
-        self.sigma2 = -6
+        self.sigma1 = torch.exp(torch.tensor(-1.)).item()
+        self.sigma2 = torch.exp(torch.tensor(-6.)).item()
         self.weight_prior = ScaleMixturePrior(self.pi, self.sigma1, self.sigma2, args)
         self.bias_prior = ScaleMixturePrior(self.pi, self.sigma1, self.sigma2, args)
 
     def forward(self, input):
-        weight = self.weight.sample()
-        bias = self.bias.sample()
-        self.log_variational_prior = self.weight.log_prob(weight) + self.bias.log_prob(bias)
-        self.log_prior = self.weight_prior.log_prob(weight) + self.bias_prior.log_prob(bias)
-
+        if self.training:
+            weight = self.weight.sample()
+            bias = self.bias.sample()
+            self.log_variational_posterior = self.weight.log_prob(weight) + self.bias.log_prob(bias)
+            self.log_prior = self.weight_prior.log_prob(weight) + self.bias_prior.log_prob(bias)
+        else:
+            weight = self.weight.mu
+            bias = self.bias.mu
+            self.log_variational_posterior = 0
+            self.log_prior = 0
         return f.linear(input, weight, bias)
 
 def get_bayesian(model, args):
@@ -180,3 +185,4 @@ def get_bayesian(model, args):
                 linear_layer = model._modules[name]._modules[sub_name]
                 model._modules[name]._modules[sub_name] = BayesianLinear(linear_layer.in_features, linear_layer.out_features, args)
     return model
+

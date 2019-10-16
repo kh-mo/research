@@ -22,7 +22,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--model", type=str)
     parser.add_argument("--dataset", type=str)
-    parser.add_argument("--epochs", type=int, default=10)
+    parser.add_argument("--epochs", type=int, default=30)
     parser.add_argument("--batch_size", type=int, default=256)
     parser.add_argument("--do_training", type=bool, default=True)
     parser.add_argument("--learningRate", type=int, default=0.001)
@@ -53,5 +53,8 @@ if __name__ == "__main__":
     acc, param_count = evaluate(model, test_data, args)
 
     # step 4
-    torch.save(model.state_dict(), os.path.join(os.getcwd(), "models/{}_{}_acc_{}_epoch_{}".format(args.model, args.dataset, acc, args.epochs)))
+    if args.do_bayesian:
+        torch.save(model.state_dict(), os.path.join(os.getcwd(),"models/bayesian_{}_{}_acc_{}_epoch_{}".format(args.model, args.dataset, acc,args.epochs)))
+    else:
+        torch.save(model.state_dict(), os.path.join(os.getcwd(), "models/{}_{}_acc_{}_epoch_{}".format(args.model, args.dataset, acc, args.epochs)))
     print("Complete model saving")
