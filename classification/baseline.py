@@ -2,7 +2,7 @@
 pretrain model : https://pytorch.org/docs/stable/torchvision/models.html
 dataset : https://pytorch.org/docs/stable/torchvision/datasets.html
 
-step 1. get model, dataset
+step 1. get model, dataset, get_bayesian(option)
 step 2. training(option)
 step 3. evaluate
 step 4. save model
@@ -14,7 +14,7 @@ import argparse
 import torch
 from torch.utils.data import DataLoader
 
-from models import get_model
+from models import get_model, get_bayesian
 from datasets import get_dataset
 from utils import evaluate, training
 
@@ -26,12 +26,16 @@ if __name__ == "__main__":
     parser.add_argument("--batch_size", type=int, default=256)
     parser.add_argument("--do_training", type=bool, default=True)
     parser.add_argument("--learningRate", type=int, default=0.001)
+    parser.add_argument("--do_bayesian", type=bool, default=False)
     args = parser.parse_args()
     args.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
     # step 1
     model = get_model(args)
     print("{} model load complete!!".format(args.model))
+    if args.do_bayesian:
+        model = get_bayesian(model, args)
+        print("change linear layer to bayesian linear layer")
 
     trainset, testset = get_dataset(args)
     train_data = DataLoader(trainset, batch_size=args.batch_size)
