@@ -15,6 +15,7 @@ def training(model, train_dataset, args):
 
     for epoch in range(args.epochs):
         loss_list = []
+        nll_list = []
         for input, target in train_dataset:
             model_output = model(input.to(args.device))
             loss = 0
@@ -22,7 +23,8 @@ def training(model, train_dataset, args):
                 negative_log_likehood = loss_function(f.log_softmax(model_output, dim=1), target.to(args.device))
                 log_variational_posterior = get_log_variational_posterior(model)
                 log_prior = get_log_prior(model)
-                loss = log_variational_posterior - log_prior + negative_log_likehood
+                loss = (log_variational_posterior - log_prior) / args.batch_size + negative_log_likehood
+                nll_list.append(negative_log_likehood.item())
             else:
                 loss = loss_function(model_output, target.to(args.device))
             optim.zero_grad()
@@ -33,6 +35,8 @@ def training(model, train_dataset, args):
         loss = sum(loss_list) / len(loss_list)
         scheduler.step(epoch+1)
         print("retraining by {}, {} epoch, loss : {}".format(args.dataset, epoch + 1, loss))
+        if args.do_bayesian:
+            print("nll loss {}".format(sum(nll_list)/len(nll_list)))
 
 def evaluate(model, test_data, args):
     # get model accuracy

@@ -121,7 +121,7 @@ class Gaussian(object):
                 - torch.log(self.sigma)
                 - (((input - self.mu)/self.sigma)**2)/2).sum()
 
-class ScaleMixturePrior(nn.Module):
+class ScaleMixturePrior(object):
     def __init__(self, pi, sigma1, sigma2, args):
         super(ScaleMixturePrior, self).__init__()
         self.pi = pi
@@ -141,11 +141,11 @@ class BayesianLinear(nn.Module):
         self.in_dim = in_dim
         self.out_dim = out_dim
 
-        self.weight_mu = nn.Parameter(torch.Tensor(self.out_dim, self.in_dim).uniform_(-0.2, 0.2))
-        self.weight_rho = nn.Parameter(torch.Tensor(self.out_dim, self.in_dim).uniform_(-0.2, 0.2))
+        self.weight_mu = nn.Parameter(torch.Tensor(self.out_dim, self.in_dim).uniform_(-4., 4.))
+        self.weight_rho = nn.Parameter(torch.Tensor(self.out_dim, self.in_dim).uniform_(-4., 4.))
         self.weight = Gaussian(self.weight_mu, self.weight_rho, args)
-        self.bias_mu = nn.Parameter(torch.Tensor(self.out_dim).uniform_(-0.2, 0.2))
-        self.bias_rho = nn.Parameter(torch.Tensor(self.out_dim).uniform_(-0.2, 0.2))
+        self.bias_mu = nn.Parameter(torch.Tensor(self.out_dim).uniform_(-4., 4.))
+        self.bias_rho = nn.Parameter(torch.Tensor(self.out_dim).uniform_(-4., 4.))
         self.bias = Gaussian(self.bias_mu, self.bias_rho, args)
 
         self.log_variational_posterior = 0

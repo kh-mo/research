@@ -64,22 +64,22 @@ python visualization.py --models lenet_300_100 lenet_5 --pruningList 0.4 0.5 0.6
 
 ### Result
 
-All results are experimented.
+All results are experimented. Acc() means accuracy(epoch/batch size).
 
-*Dataset* | *Model* | *DNN Acc* | *BayesianNN Acc(MOPED)* | *BayesianNN Acc(random prior)* | *Epochs/batch* |
+*Dataset* | *Model* | *DNN Acc* | *BayesianNN Acc(MOPED)* | *BayesianNN Acc(BayesbyBackprop)* |
 :---: | :---: | :---: | :---: | :---: | :---: |
-MNIST | Lenet | 97.22% | 00.00% | 00.00% | 30/256 |
-F-MNIST | Lenet | 85.41% | 00.00% | 00.00% | 30/256 |
-MNIST | SCNN | 96.66% | 00.00% | 00.00% | 30/256 |
-F-MNIST | SCNN | 83.87% | 00.00% | 00.00% | 30/256 |
-CIFAR-10 | Alexnet | 82.73% | 00.00% | 00.00% | 30/256 |
-CIFAR-10 | Vggnet | 78.14% | 00.00% | 00.00% | 120/64 |
-CIFAR-10 | Vggnet | 78.78% | 00.00% | 00.00% | 30/64 |
-CIFAR-10 | Resnet-18 | 94.05% | 00.00% | 00.00% | 30/256 |
-CIFAR-10 | Resnet-34 | 94.26% | 00.00% | 00.00% | 30/256 |
+MNIST | Lenet | 98.96%(30/256) | 00.00% | 00.00%(0/0) |
+F-MNIST | Lenet | 87.96%(30/256) | 00.00% | 00.00%(0/0) |
+MNIST | SCNN | 98.71%(30/256) | 00.00% | 14.94%(256/120) |
+F-MNIST | SCNN | 86.56%(30/256) | 00.00% | 19.39%(256/120) |
+CIFAR-10 | Alexnet | 85.91%(30/256) | 00.00% | 00.00%(0/0) |
+CIFAR-10 | Vggnet | 79.8%(120/64) | 00.00% | 00.00%(0/0) |
+CIFAR-10 | Vggnet | 81.36%(30/64) | 00.00% | 00.00%(0/0) |
+CIFAR-10 | Resnet-18 | 94.18%(30/256) | 00.00% | 00.00%(0/0) |
+CIFAR-10 | Resnet-34 | 94.79%(30/256) | 00.00% | 86.21%(256/120) |
 
 #### Get Baseline Result
-- Model : lenet, scnn, alexnet
+- Model : lenet, scnn, alexnet, vggnet, resnet
 - Dataset : mnist, fmnist, cifar10
 - Depending dimension of the input image, there are possible combinations of datasets and models.
 ```shell
