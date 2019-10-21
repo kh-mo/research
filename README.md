@@ -64,12 +64,12 @@ python visualization.py --models lenet_300_100 lenet_5 --pruningList 0.4 0.5 0.6
 
 ### Result
 
-All results are experimented. Acc() means accuracy(epoch/batch size).
+All results are experimented. Acc() means accuracy(epoch/batch size). 
 
 *Dataset* | *Model* | *DNN Acc* | *BayesianNN Acc(MOPED)* | *BayesianNN Acc(BayesbyBackprop)* |
-:---: | :---: | :---: | :---: | :---: | :---: |
-MNIST | Lenet | 98.96%(30/256) | 00.00% | 00.00%(0/0) |
-F-MNIST | Lenet | 87.96%(30/256) | 00.00% | 00.00%(0/0) |
+:---: | :---: | :---: | :---: | :---: |
+MNIST | Lenet | 98.96%(30/256) | 00.00% | 9.8%(256/120) |
+F-MNIST | Lenet | 87.96%(30/256) | 00.00% | 11.46%(256/120) |
 MNIST | SCNN | 98.71%(30/256) | 00.00% | 14.94%(256/120) |
 F-MNIST | SCNN | 86.56%(30/256) | 00.00% | 19.39%(256/120) |
 CIFAR-10 | Alexnet | 85.91%(30/256) | 00.00% | 00.00%(0/0) |

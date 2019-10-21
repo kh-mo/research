@@ -109,11 +109,15 @@ class Gaussian(object):
         self.mu = mu.to(args.device)
         self.rho = rho.to(args.device)
         self.normal = torch.distributions.normal.Normal(loc=0, scale=1)
-        self.sigma = 0
+        # self.sigma = 0
+
+    @property
+    def sigma(self):
+        return torch.log1p(torch.exp(self.rho))
 
     def sample(self):
         epsilon = self.normal.sample(self.rho.size()).to(self.args.device)
-        self.sigma = torch.log(1 + torch.exp(self.rho))
+        # self.sigma = torch.log(1 + torch.exp(self.rho))
         return self.mu + self.sigma * epsilon
 
     def log_prob(self, input):
@@ -141,11 +145,11 @@ class BayesianLinear(nn.Module):
         self.in_dim = in_dim
         self.out_dim = out_dim
 
-        self.weight_mu = nn.Parameter(torch.Tensor(self.out_dim, self.in_dim).uniform_(-4., 4.))
-        self.weight_rho = nn.Parameter(torch.Tensor(self.out_dim, self.in_dim).uniform_(-4., 4.))
+        self.weight_mu = nn.Parameter(torch.Tensor(self.out_dim, self.in_dim).uniform_(-3., 3.))
+        self.weight_rho = nn.Parameter(torch.Tensor(self.out_dim, self.in_dim).uniform_(-3., 3.))
         self.weight = Gaussian(self.weight_mu, self.weight_rho, args)
-        self.bias_mu = nn.Parameter(torch.Tensor(self.out_dim).uniform_(-4., 4.))
-        self.bias_rho = nn.Parameter(torch.Tensor(self.out_dim).uniform_(-4., 4.))
+        self.bias_mu = nn.Parameter(torch.Tensor(self.out_dim).uniform_(-3., 3.))
+        self.bias_rho = nn.Parameter(torch.Tensor(self.out_dim).uniform_(-3., 3.))
         self.bias = Gaussian(self.bias_mu, self.bias_rho, args)
 
         self.log_variational_posterior = 0
