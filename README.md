@@ -86,5 +86,24 @@ CIFAR-10 | Resnet-34 | 94.79%(30/256) | 00.00% | 86.21%(256/120) |
 python baseline.py --model=alexnet --dataset=mnist
 ```
 
+## Topic3 - classification & pruning
+
+### Result
+
+All results are experimented. Acc() means accuracy(epoch/batch size).
+
+*Dataset* | *Model* | *Top1 Acc* |
+:---: | :---: | :---: |
+CIFAR-10 | Resnet-18 | 94.18%(30/256) |
+CIFAR-10 | Resnet-34 | 94.79%(30/256) |
+
+#### Get Baseline Result
+- Model : resnet
+- Dataset : cifar10
+- Depending dimension of the input image, there are possible combinations of datasets and models.
+```shell
+python baseline.py --model=resnet --dataset=cifar10
+```
+
 ## Reference
 - [Learning both Weights and Connections for Efficient Neural Networks](https://papers.nips.cc/paper/5784-learning-both-weights-and-connections-for-efficient-neural-network.pdf), accepted NIPS 2015
