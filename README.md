@@ -92,10 +92,10 @@ python baseline.py --model=alexnet --dataset=mnist
 
 All results are experimented. Acc() means accuracy(epoch/batch size).
 
-*Dataset* | *Model* | *Top1 Acc* |
-:---: | :---: | :---: |
-CIFAR-10 | Resnet-18 | 94.18%(30/256) |
-CIFAR-10 | Resnet-34 | 94.79%(30/256) |
+*Dataset* | *Model* | *Top1 Acc* | Parameters |
+:---: | :---: | :---: | :---: |
+CIFAR-10 | Resnet-18 | 94.58%(30/256) | 11,689,512 |
+CIFAR-10 | Resnet-34 | 00.00%(00/00) | 0 |
 
 #### Get Baseline Result
 - Model : resnet
