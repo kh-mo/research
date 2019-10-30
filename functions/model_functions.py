@@ -1,3 +1,6 @@
+import os
+
+import torch
 from torchvision import models
 
 def get_model(args, pretrain=True):
@@ -10,6 +13,9 @@ def get_model(args, pretrain=True):
         model = models.alexnet(pretrained=pretrain).to(args.device)
     else:
         print("{} model does not exist.".format(args.model))
+
+    if args.load_folder_model != "None":
+        model.load_state_dict(torch.load(os.path.join(os.getcwd(), "models/{}".format(args.load_folder_model))))
 
     if args.do_training == "True":
         model.train()
