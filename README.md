@@ -11,7 +11,7 @@ All results are experimented. Acc() means accuracy(epoch/batch size).
 *Dataset* | *Model* | *Prune Method* | *Top1 Acc* | Parameters |
 :---: | :---: | :---: | :---: | :---: |
 CIFAR-10 | Alexnet | None | 85.62%(30/256) | 61,100,840 |
-CIFAR-10 | Alexnet | [\[1\]](### Reference) | 00.00%(0/00) | 000 |
+CIFAR-10 | Alexnet | [\[1\]](#reference) | 00.00%(0/00) | 000 |
 CIFAR-10 | Resnet-18 | None | 94.21%(30/256) | 11,689,512 |
 CIFAR-10 | Resnet-34 | None | 94.62%(30/256) | 21,797,672 |
 
@@ -26,7 +26,7 @@ python baseline.py --model=alexnet
 #### Run pruning method
 - Pruning : songhan, fpgm
 ```shell
-python pruning.py --model=alexnet --pruning=fpgm
+python pruning.py --model=alexnet --load_folder_model=alexnet_cifar10_acc_0.8562_epoch_30 --pruning_method=fpgm
 ```
 
 ### Reference
