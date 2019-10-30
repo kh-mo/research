@@ -9,7 +9,6 @@ def get_dataset(args):
     except FileExistsError as e:
         print("{} folder already exist".format(args.dataset))
         pass
-    dataset = None
 
     if args.dataset == "cifar10":
         train = datasets.CIFAR10(root=dataset_folder,

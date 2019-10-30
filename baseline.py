@@ -1,5 +1,5 @@
 '''
-pretrain model : https://pytorch.org/docs/stable/torchvision/models.html
+pretrained model : https://pytorch.org/docs/stable/torchvision/models.html
 dataset : https://pytorch.org/docs/stable/torchvision/datasets.html
 
 step 1. get model, dataset
@@ -12,9 +12,9 @@ import argparse
 
 import torch
 
-from pruning.model_functions import get_model
-from pruning.dataset_functions import get_dataset
-from pruning.utils import evaluating, training, saving
+from functions.model_functions import get_model
+from functions.dataset_functions import get_dataset
+from functions.utils import evaluating, training, saving
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
