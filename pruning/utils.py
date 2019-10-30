@@ -46,4 +46,4 @@ def saving(model, args):
     except FileExistsError as e:
         print("{} folder already exist".format(args.dataset))
         pass
-    torch.save(model.state_dict(), os.path.join(os.getcwd(), "models/{}_{}_acc_{}_epoch_{}".format(args.model, args.dataset, args.acc, args.epochs)))
+    torch.save(model.state_dict(), os.path.join(os.getcwd(), "models/{}_{}_acc_{}_epoch_{}".format(args.model, args.dataset, args.accuracy, args.epochs)))
