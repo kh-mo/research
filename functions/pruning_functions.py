@@ -1,3 +1,4 @@
+import time
 from collections import OrderedDict
 
 import torch
@@ -6,18 +7,24 @@ import torch.nn as nn
 def pruning(model, train_data, args):
     if args.pruning_method == "songhan":
         print("run songhan algorithm")
-        songhan_algorithm(model, train_data, args)
+        total_train_time = songhan_algorithm(model, train_data, args)
     elif args.pruning_method == "fpgm":
         print("run fpgm algorithm")
     else:
         print("{} algorithm does not exist.".format(args.pruning_method))
+    return total_train_time
 
 def songhan_algorithm(model, train_data, args):
     cut_point = get_cut_point(model, args.cut_rate)
+    train_start_time = 0
+    train_end_time = 0
     for epoch in range(args.pruning_epochs):
         print("start functions {} epoch\n".format(epoch + 1))
         prune_position_list = run_pruning(model, cut_point)
+        train_start_time = time.time()
         retraining(model, train_data, prune_position_list, args)
+        train_end_time = time.time()
+    return train_end_time - train_start_time
 
 def get_cut_point(model, criterion):
     '''

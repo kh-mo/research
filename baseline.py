@@ -6,8 +6,9 @@ step 1. get model, dataset
 step 2. training(option)
 step 3. evaluate
 step 4. save model
+step 5. check time
 '''
-
+import time
 import argparse
 
 import torch
@@ -38,15 +39,25 @@ if __name__ == "__main__":
     print("{} dataset load complete!!".format(args.dataset))
 
     # step 2
+    train_start_time = time.time()
     if model.training:
         print("start training")
         training(model, train_data, args)
         print("training done.")
+    train_end_time = time.time()
 
     # step 3
+    inference_start_time = time.time()
     print("use {} for evaluating".format(args.device))
     args.accuracy, args.param_count = evaluating(model, test_data, args)
+    inference_end_time = time.time()
 
     # step 4
     saving(model, args)
     print("Complete model saving")
+
+    # step 5
+    total_train_time = train_end_time - train_start_time
+    total_inference_time = inference_end_time - inference_start_time
+    print("train time : {} hour {} minite".format(int(total_train_time/3600), int((total_train_time%3600)/60)))
+    print("inference time : {} hour {} minite".format(int(total_inference_time/3600), int((total_inference_time%3600)/60)))
