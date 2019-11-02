@@ -20,7 +20,7 @@ def training(model, train_dataset, args):
 
         loss = sum(loss_list) / len(loss_list)
         scheduler.step(epoch+1)
-        print("retraining by {}, {} epoch, loss : {}".format(args.dataset, epoch + 1, loss))
+        print("training by {}, {} epoch, loss : {}".format(args.dataset, epoch + 1, loss))
 
 def evaluating(model, test_data, args):
     # get model accuracy

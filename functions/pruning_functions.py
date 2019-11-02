@@ -16,14 +16,12 @@ def pruning(model, train_data, args):
 
 def songhan_algorithm(model, train_data, args):
     cut_point = get_cut_point(model, args.cut_rate)
-    train_start_time = 0
-    train_end_time = 0
+    train_start_time = time.time()
     for epoch in range(args.pruning_epochs):
         print("start functions {} epoch\n".format(epoch + 1))
         prune_position_list = run_pruning(model, cut_point)
-        train_start_time = time.time()
         retraining(model, train_data, prune_position_list, args)
-        train_end_time = time.time()
+    train_end_time = time.time()
     return train_end_time - train_start_time
 
 def get_cut_point(model, criterion):
