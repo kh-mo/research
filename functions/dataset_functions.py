@@ -1,6 +1,6 @@
 import os
 from torchvision import datasets, transforms
-from torch.utils.data import DataLoader
+from torch.utils.data import DataLoader, RandomSampler
 
 def get_dataset(args):
     dataset_folder = os.path.join(os.getcwd(), "datasets")
@@ -26,5 +26,6 @@ def get_dataset(args):
 
     train_data = DataLoader(train, batch_size=args.batch_size)
     test_data = DataLoader(test, batch_size=args.batch_size)
-    dataset = (train_data, test_data)
+    inference_data = DataLoader(test, batch_size=args.inference_batch_size, sampler=RandomSampler(test))
+    dataset = (train_data, test_data, inference_data)
     return dataset

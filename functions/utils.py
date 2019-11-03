@@ -1,4 +1,5 @@
 import os
+import time
 import torch
 import numpy as np
 import torch.nn as nn
@@ -53,3 +54,15 @@ def saving(model, args):
     else:
         torch.save(model.state_dict(), os.path.join(os.getcwd(), "models/{}_{}_{}_acc_{}_epoch_{}".format(
             args.model, args.pruning_method, args.dataset, args.accuracy, args.epochs)))
+
+def check_inference_time(model, dataset, args):
+    inference_time = []
+    dataiter = iter(dataset)
+    for i in range(args.inference_sampling):
+        image, target = dataiter.next()
+        inference_start_time = time.time()
+        model_output = model(image.to(args.device))
+        inference_end_time = time.time()
+        total_inference_time = inference_end_time - inference_start_time
+        inference_time.append(round(total_inference_time, 3))
+    return inference_time
