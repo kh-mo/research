@@ -24,7 +24,7 @@ if __name__ == "__main__":
     parser.add_argument("--load_folder_model", type=str, default="None")
     parser.add_argument("--dataset", type=str, default="cifar10")
     parser.add_argument("--pruning_method", type=str, default="songhan")
-    parser.add_argument("--cut_rate", type=float, default=0.7)
+    parser.add_argument("--cut_rate", type=float, default=0.5)
     parser.add_argument("--epochs", type=int, default=30)
     parser.add_argument("--pruning_epochs", type=int, default=1)
     parser.add_argument("--batch_size", type=int, default=256)

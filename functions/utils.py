@@ -64,5 +64,5 @@ def check_inference_time(model, dataset, args):
         model_output = model(image.to(args.device))
         inference_end_time = time.time()
         total_inference_time = inference_end_time - inference_start_time
-        inference_time.append(round(total_inference_time, 3))
+        inference_time.append(round(total_inference_time, 3)*1000)
     return inference_time
