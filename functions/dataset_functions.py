@@ -21,6 +21,15 @@ def get_dataset(args):
                                 download=True,
                                 transform=transforms.Compose([transforms.Resize((224,224)),
                                                               transforms.ToTensor()]))
+    elif args.dataset == "mnist":
+        train = datasets.MNIST(root=dataset_folder,
+                               train=True,
+                               download=True,
+                               transform=transforms.Compose([transforms.ToTensor()]))
+        test = datasets.MNIST(root=dataset_folder,
+                              train=False,
+                              download=True,
+                              transform=transforms.Compose([transforms.ToTensor()]))
     else:
         print("{} dataset does not exist.".format(args.dataset))
 
