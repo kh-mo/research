@@ -33,7 +33,6 @@ if __name__ == "__main__":
     parser.add_argument("--do_training", type=str, default="True")
     parser.add_argument("--learning_rate", type=int, default=0.001)
     parser.add_argument("--accuracy", type=float, default=0.)
-    parser.add_argument("--param_count", type=int, default=0)
     args = parser.parse_args()
     args.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
@@ -51,7 +50,7 @@ if __name__ == "__main__":
 
     # step 3
     print("use {} for evaluating".format(args.device))
-    args.accuracy, args.param_count = evaluating(model, test_data, args)
+    args.accuracy = evaluating(model, test_data, args)
 
     # step 4
     saving(model, args)

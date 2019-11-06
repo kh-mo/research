@@ -34,12 +34,14 @@ def evaluating(model, test_data, args):
     total_acc = sum([1 if pred[i] == label[i] else 0 for i in range(len(pred))]) / len(pred)
 
     # get number of parameters
-    count = 0
+    total_parameter = 0
+    nonzero_parameter = 0
     for i in model.parameters():
-        count += len(np.nonzero(i.detach().cpu().numpy())[0])
+        total_parameter += torch.flatten(i, 0).shape[0]
+        nonzero_parameter += len(np.nonzero(i.detach().cpu().numpy())[0])
 
-    print("Accuracy : {}, Parameters : {}".format(total_acc, count))
-    return total_acc, count
+    print("Accuracy : {}, Total_Parameters : {}, Nonzero-Parameter : {}".format(total_acc, total_parameter, nonzero_parameter))
+    return total_acc
 
 def saving(model, args):
     try:
