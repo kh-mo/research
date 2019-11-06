@@ -21,6 +21,7 @@ MNIST | Lenet-5 | [\[1\] pruning rate 0.5](#reference) | 76.07%(1/30/256) | 14,7
 
 #### Reproduce Paper
 For Lenet-300-100
+
 *Layer* | *Weights* | *FLOP* | *Nonzero Weights* |
 :---: | :---: | :---: | :---: |
 fc1 | 235,500 | 470,400 | 116,247 |
@@ -29,6 +30,7 @@ fc3 | 1,010 | 2,000 | 477 |
 Total | 266,610 | 532,400 | 133,304 |
 
 For Lenet-5
+
 *Layer* | *Weights* | *FLOP* | *Nonzero Weights* |
 :---: | :---: | :---: | :---: |
 conv1 | 60 | 73,008 | 44 |
