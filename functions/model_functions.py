@@ -1,4 +1,5 @@
 import os
+from collections import OrderedDict
 
 import torch
 import torch.nn as nn
@@ -7,13 +8,13 @@ from torchvision import models
 class Lenet_300_100(nn.Module):
     def __init__(self):
         super(Lenet_300_100, self).__init__()
-        self.classifier = nn.Sequential(
-            nn.Linear(28 * 28, 300),
-            nn.ReLU(),
-            nn.Linear(300, 100),
-            nn.ReLU(),
-            nn.Linear(100, 10),
-        )
+        self.classifier = nn.Sequential(OrderedDict([
+            ('fc1', nn.Linear(28 * 28, 300)),
+            ('relu1', nn.ReLU()),
+            ('fc2', nn.Linear(300, 100)),
+            ('relu2', nn.ReLU()),
+            ('fc3', nn.Linear(100, 10)),
+        ]))
 
     def forward(self, x):
         x = torch.flatten(x, 1)
@@ -23,21 +24,21 @@ class Lenet_300_100(nn.Module):
 class Lenet_5(nn.Module):
     def __init__(self):
         super(Lenet_5, self).__init__()
-        self.features = nn.Sequential(
-            nn.Conv2d(1, 6, kernel_size=3),
-            nn.ReLU(),
-            nn.MaxPool2d(kernel_size=2, stride=2),
-            nn.Conv2d(6, 6, kernel_size=3),
-            nn.ReLU(),
-            nn.MaxPool2d(kernel_size=2, stride=2, padding=1),
-        )
-        self.classifier = nn.Sequential(
-            nn.Dropout(),
-            nn.Linear(216, 128),
-            nn.ReLU(),
-            nn.Dropout(),
-            nn.Linear(128, 10)
-        )
+        self.features = nn.Sequential(OrderedDict([
+            ('conv1', nn.Conv2d(1, 6, kernel_size=3)),
+            ('relu1', nn.ReLU()),
+            ('pool1', nn.MaxPool2d(kernel_size=2, stride=2)),
+            ('conv2', nn.Conv2d(6, 6, kernel_size=3)),
+            ('relu2', nn.ReLU()),
+            ('pool2', nn.MaxPool2d(kernel_size=2, stride=2, padding=1)),
+        ]))
+        self.classifier = nn.Sequential(OrderedDict([
+            ('drop1', nn.Dropout()),
+            ('fc1', nn.Linear(216, 128)),
+            ('relu1', nn.ReLU()),
+            ('drop2', nn.Dropout()),
+            ('fc2', nn.Linear(128, 10))
+        ]))
 
     def forward(self, x):
         x = self.features(x)
