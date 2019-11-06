@@ -12,38 +12,48 @@ Pruning acc() means accuracy(pruning epochs/retraining epochs/batch size).
 Inference time check millisecond time about 1 batch size and average 10 samples.
 
 #### Baseline
-*Dataset* | *Model* | *Top1 Acc* | Parameters | training time | inference time |
-:---: | :---: | :---: | :---: | :---: | :---: |
-CIFAR-10 | Lenet-300-100 | 0%(30/256) | 0 | 00 hour 0 minute | 0 ms 0 variance |
+*Dataset* | *Model* | *Prune Method* | *Top1 Acc* | Parameters | training time | inference time |
+:---: | :---: | :---: | :---: | :---: | :---: | :---: |
+MNIST | Lenet-300-100 | none | 98.13%(30/256) | 266,610 | 0 hour 2 minute | 0.4 ms 0.24 variance |
+MNIST | Lenet-300-100 | [\[1\] pruning rate 0.5](#reference) | 92.72%(1/30/256) | 133,304(nonzero) | 0 hour 2 minute | 0.8 ms 0.16 variance |
+MNIST | Lenet-5 | none | 98.12%(30/256) | 29,456 | 0 hour 2 minute | 1.1 ms 0.09 variance |
+MNIST | Lenet-5 | [\[1\] pruning rate 0.5](#reference) | 76.07%(1/30/256) | 14,726(nonzero) | 0 hour 2 minute | 0.8 ms 0.16 variance |
 
 #### Reproduce Paper
-*Dataset* | *Model* | *Prune Method* | *Top1 Acc* | Parameters | training time | inference time |
-:---: | :---: | :---: | :---: | :---: | :---: | :---: |
+For Lenet-300-100
+*Layer* | *Weights* | *FLOP* | *Nonzero Weights* |
+:---: | :---: | :---: | :---: |
+fc1 | 235,500 | 470,400 | 116,247 |
+fc2 | 30,100 | 60,000 | 16,580 |
+fc3 | 1,010 | 2,000 | 477 |
+Total | 266,610 | 532,400 | 133,304 |
 
-*Dataset* | *Model* | *Prune Method* | *Top1 Acc* | Parameters | training time | inference time |
-:---: | :---: | :---: | :---: | :---: | :---: | :---: |
-CIFAR-10 | Alexnet | None | 86.3%(30/256) | 61,100,840 | 00 hour 35 minute | 2.4 ms 0.24 variance |
-CIFAR-10 | Alexnet | [\[1\] pruning rate 0.5](#reference) | 11.63%(1/30/256) | 30,548,391 | 00 hour 40 minute | 1.6 ms 23.04 variance |
-CIFAR-10 | Alexnet | [\[1\] pruning rate 0.5](#reference) | 00.00%(3/30/256) | 000 | 00 hour 00 minute | 00 ms 00 variance |
-CIFAR-10 | Alexnet | [\[1\] pruning rate 0.5](#reference) | 00.00%(5/30/256) | 000 | 00 hour 00 minute | 00 ms 00 variance |
-CIFAR-10 | Alexnet | [\[1\] pruning rate 0.5](#reference) | 00.00%(7/30/256) | 000 | 00 hour 00 minute | 00 ms 00 variance |
-CIFAR-10 | Alexnet | [\[1\] pruning rate 0.5](#reference) | 00.00%(9/30/256) | 000 | 00 hour 00 minute | 00 ms 00 variance |
-CIFAR-10 | Resnet-18 | None | 00.00%(30/256) | 000 | 00 hour 00 minute | 00 ms 00 variance |
-CIFAR-10 | Resnet-18 | [\[1\] pruning rate 0.5](#reference) | 00.00%(1/30/256) | 000 | 00 hour 00 minute | 00 ms 00 variance |
-CIFAR-10 | Resnet-34 | None | 00.00%(30/256) | 000 | 00 hour 00 minute | 00 ms 00 variance |
+For Lenet-5
+*Layer* | *Weights* | *FLOP* | *Nonzero Weights* |
+:---: | :---: | :---: | :---: |
+conv1 | 60 | 73,008 | 44 |
+conv2 | 330 | 78,408 | 163 |
+fc1 | 27,776 | 55,296 | 13,880 |
+fc2 | 1,290 | 2,560 | 639 |
+Total | 29,456 | 209,272 | 14,726 |
 
 ### Getting Start
 #### Get Baseline
-- Model : alexnet, resnet
-- Dataset : cifar10
+- Model : lenet
+- Dataset : mnist
 ```shell
-python baseline.py --model=alexnet
+python baseline.py --model=lenet_300_100 --dataset=mnist
 ```
 
 #### Run pruning method
 - Pruning : songhan, fpgm
 ```shell
-python pruning.py --model=alexnet --load_folder_model=alexnet_cifar10_acc_0.8562_epoch_30 --pruning_method=fpgm
+python pruning.py --model=lenet_300_100 --dataset=mnist --load_folder_model=alexnet_cifar10_acc_0.8562_epoch_30 --pruning_method=fpgm
+```
+
+#### Calculate FLOP
+```shell
+python calFLOP.py --model=lenet_300_100 --dataset=mnist --load_folder_model=lenet_300_100_mnist_acc_0.9813_epoch_30
 ```
 
 ### Reference
