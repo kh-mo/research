@@ -60,7 +60,7 @@ def retraining(model, train_data, prune_position_list, args):
     '''
     loss_function = nn.CrossEntropyLoss().to(args.device)
     optim = torch.optim.Adam(model.parameters(), lr=args.learning_rate)
-    scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optim, T_max=args.epochs, eta_min=args.learning_rate / args.epochs)
+    # scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optim, T_max=args.epochs, eta_min=args.learning_rate / args.epochs)
 
     for epoch in range(args.epochs):
         loss_list = []
@@ -75,5 +75,5 @@ def retraining(model, train_data, prune_position_list, args):
             loss_list.append(loss.item())
 
         loss = sum(loss_list) / len(loss_list)
-        scheduler.step(epoch + 1)
+        # scheduler.step(epoch + 1)
         print("retraining {} epoch, loss : {}".format(epoch+1, loss))
